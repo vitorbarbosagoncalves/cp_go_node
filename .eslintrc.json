@@ -10,9 +10,11 @@
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": "latest"
+    "ecmaVersion": "latest",
+    "project": ["./tsconfig.json"] // Specify it only for TypeScript files
   },
   "plugins": ["@typescript-eslint", "import"],
+  "ignorePatterns": ["*.test.ts"],
   "rules": {
     "import/extensions": [
       "error",
