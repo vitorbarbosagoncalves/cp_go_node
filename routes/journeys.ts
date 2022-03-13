@@ -107,13 +107,17 @@ const router = Router();
 const { journeys } = comboios;
 const today = new Date();
 
-const getDepartures = (journeys: Journey[]): Date[] => {
-  return journeys.map((journey) => new Date(journey.legs[0].departure));
-};
+const getJourneys = async (
+  originId: string,
+  destinationId: string,
+  date?: Date,
+): Promise<Journey[]> => journeys(originId, destinationId, { when: date });
 
-const getArrivals = (journeys: Journey[]): Date[] => {
-  return journeys.map((journey) => new Date(journey.legs[0].arrival));
-};
+const getDepartures = (journeyList: Journey[]): Date[] =>
+  journeyList.map((journey) => new Date(journey.legs[0].departure));
+
+const getArrivals = (journeyList: Journey[]): Date[] =>
+  journeyList.map((journey) => new Date(journey.legs[0].arrival));
 
 const getCurrentAndDayAfterJourneys = async (
   originId: string,
@@ -129,9 +133,8 @@ const getCurrentAndDayAfterJourneys = async (
   return [...todayJourneys, ...dayAfterJourneys];
 };
 
-const getDateList = (allJourneys: Journey[], byArrival?: boolean) => {
-  return !byArrival ? getDepartures(allJourneys) : getArrivals(allJourneys);
-};
+const getDateList = (allJourneys: Journey[], byArrival?: boolean) =>
+  !byArrival ? getDepartures(allJourneys) : getArrivals(allJourneys);
 
 const getNearestDateIndex = (
   allJourneys: Journey[],
@@ -173,12 +176,6 @@ const getNearestDate = (
 
   return allJourneys[nextDateIndex];
 };
-
-const getJourneys = async (
-  originId: string,
-  destinationId: string,
-  date?: Date,
-): Promise<Journey[]> => journeys(originId, destinationId, { when: date });
 
 const getNextJourney = async (
   originId: string,
